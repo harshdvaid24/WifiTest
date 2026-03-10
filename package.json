@@ -25,9 +25,7 @@
     "react-native-screens": "^3.30.0",
     "react-native-share": "^10.1.0",
     "react-native-svg": "^15.2.0",
-    "react-native-tflite": "^0.3.0",
     "react-native-vector-icons": "^10.0.0",
-    "victory-native": "^40.0.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
