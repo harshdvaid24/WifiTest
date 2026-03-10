@@ -58,7 +58,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'WifiSense2024' }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'wifisense-key' }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'WifiSense2024' }}
-        run: ./gradlew assembleRelease --no-daemon --stacktrace
+        run: ./gradlew assembleRelease --no-daemon --stacktrace --info 2>&1 | tail -200
 
       - name: Rename APK with Version
         run: |
@@ -90,7 +90,7 @@ jobs:
             SIZE=$(du -h android/app/build/outputs/apk/release/app-release.apk | cut -f1)
             echo "✅ **Signed Release APK built successfully**" >> $GITHUB_STEP_SUMMARY
             echo "- **Size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Path:** \`android/app/build/outputs/apk/release/app-release.apk\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Path:** `android/app/build/outputs/apk/release/app-release.apk`" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "📱 Download the APK from the **Artifacts** section below." >> $GITHUB_STEP_SUMMARY
           else
