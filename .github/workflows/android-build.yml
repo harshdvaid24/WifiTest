@@ -10,8 +10,11 @@ on:
 jobs:
   build-signed-apk:
     name: Build Signed Release APK
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+
+    env:
+      ANDROID_NDK_VERSION: "26.1.10909125"
 
     steps:
       - name: Checkout Code
@@ -28,6 +31,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: sdkmanager "ndk;${{ env.ANDROID_NDK_VERSION }}"
 
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
@@ -54,11 +64,18 @@ jobs:
       - name: Build Signed Release APK
         working-directory: android
         env:
+          ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
           KEYSTORE_FILE: wifisense-release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD || 'WifiSense2024' }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'wifisense-key' }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'WifiSense2024' }}
-        run: ./gradlew assembleRelease --no-daemon --stacktrace --info 2>&1 | tail -200
+        run: |
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ./gradlew assembleRelease \
+            --no-daemon \
+            --stacktrace \
+            -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
 
       - name: Rename APK with Version
         run: |
