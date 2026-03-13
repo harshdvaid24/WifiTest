@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.wifisense'
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.wifisense"
-        minSdk rootProject.ext.minSdkVersion
-        targetSdk rootProject.ext.targetSdkVersion
+        minSdk 28
+        targetSdk 34
         versionCode 1
         versionName "1.0.0"
     }
