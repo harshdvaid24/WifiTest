@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.wifisense.R
 import com.wifisense.WifiSenseApp
 import com.wifisense.databinding.FragmentSignalBinding
-import com.wifisense.wifi.AccessPoint
 import com.wifisense.wifi.WifiScanner
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

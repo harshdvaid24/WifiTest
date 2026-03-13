@@ -15,7 +15,6 @@ import com.wifisense.databinding.FragmentDashboardBinding
 import com.wifisense.wifi.WifiScanner
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 import kotlin.math.sqrt
 
 class DashboardFragment : Fragment() {
