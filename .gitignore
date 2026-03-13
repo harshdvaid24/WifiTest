@@ -1,9 +1,9 @@
-node_modules/
 .gradle/
 build/
 android/app/build/
 android/.gradle/
 local.properties
+android/local.properties
 *.iml
 .idea/
 *.hprof
@@ -12,9 +12,5 @@ local.properties
 !android/app/wifisense-release.keystore
 .DS_Store
 *.log
-npm-debug.*
-yarn-error.*
 .env
 .env.local
-.metro-health-check*
-android/local.properties

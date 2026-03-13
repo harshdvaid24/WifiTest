@@ -11,10 +11,7 @@ jobs:
   build-signed-apk:
     name: Build Signed Release APK
     runs-on: ubuntu-22.04
-    timeout-minutes: 45
-
-    env:
-      ANDROID_NDK_VERSION: "26.1.10909125"
+    timeout-minutes: 30
 
     steps:
       - name: Checkout Code
@@ -27,20 +24,8 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Install Android NDK
-        run: sdkmanager "ndk;${{ env.ANDROID_NDK_VERSION }}"
-
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
 
       - name: Decode Signing Keystore
         env:
@@ -56,11 +41,6 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
-      - name: Download Gradle Wrapper JAR
-        run: |
-          curl -L https://github.com/gradle/gradle/raw/v8.6.0/gradle/wrapper/gradle-wrapper.jar \
-            -o android/gradle/wrapper/gradle-wrapper.jar
-
       - name: Build Signed Release APK
         working-directory: android
         env:
@@ -70,8 +50,6 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS || 'wifisense-key' }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'WifiSense2024' }}
         run: |
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
-          echo "ANDROID_HOME=$ANDROID_HOME"
           ./gradlew assembleRelease \
             --no-daemon \
             --stacktrace \
@@ -105,11 +83,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ -f android/app/build/outputs/apk/release/app-release.apk ]; then
             SIZE=$(du -h android/app/build/outputs/apk/release/app-release.apk | cut -f1)
-            echo "✅ **Signed Release APK built successfully**" >> $GITHUB_STEP_SUMMARY
+            echo "**Signed Release APK built successfully**" >> $GITHUB_STEP_SUMMARY
             echo "- **Size:** ${SIZE}" >> $GITHUB_STEP_SUMMARY
-            echo "- **Path:** `android/app/build/outputs/apk/release/app-release.apk`" >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "📱 Download the APK from the **Artifacts** section below." >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **Build failed** — check logs above." >> $GITHUB_STEP_SUMMARY
+            echo "**Build failed** — check logs above." >> $GITHUB_STEP_SUMMARY
           fi
