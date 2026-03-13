@@ -27,6 +27,11 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Install SDK Platform 34
+        run: |
+          sdkmanager "platforms;android-34" "build-tools;34.0.0"
+          sdkmanager --list | head -30
+
       - name: Decode Signing Keystore
         env:
           SIGNING_KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
@@ -59,6 +64,7 @@ jobs:
           ./gradlew assembleRelease \
             --no-daemon \
             --stacktrace \
+            --info \
             -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g"
 
       - name: Rename APK with Version
